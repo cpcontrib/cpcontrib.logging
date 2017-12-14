@@ -15,7 +15,7 @@ EmailLogger sends a email with all the log messages after calling Flush or Dispo
 
 ```c#
 <%
-  Log = new EmailLogger("");
+  Log = new EmailLogger(subject:"Logging sample", receipients:"somebody@cp.com;others@another.com");
   //Log.IsDebugEnabled = true; //use this to increase logging level to Debug
   
   try
@@ -35,14 +35,14 @@ The UtilLogLogger utilizes the Util.Log method for recording log entries to hist
 
 ```c#
 //UtilLogLogger can utilize current asset, or log to System Log (no asset) by using other constructor
-Log UtilLogLogger = new UtilLogLogger(asset);  //Log entries go into asset's history
+Log UtilLogLogger = new UtilLogLogger("Component Name",asset);  //Log entries go into asset's history
 
-Log UtilLogLogger = new UtilLogLogger(); //Log entries go into System history
+Log UtilLogLogger = new UtilLogLogger("Component Name"); //Log entries go into System history
 ```
 
 When using the Buffered version (by default), setting Buffered=true, all the log messages are stored up until Flush or Dispose are called.  Setting Buffered=false will cause every Log message to be immediately run through the Util.Log underlying method.  This will produce a chatty history, and might be what is desired.
 ```c#
-Log UtilLogLogger = new UtilLogLogger(asset) { Buffered = false };
+Log UtilLogLogger = new UtilLogLogger("Component Name",asset) { Buffered = false };
 
 Log.Debug("Test");
 Log.Info("Info Test"); //will see this go immediately into History
