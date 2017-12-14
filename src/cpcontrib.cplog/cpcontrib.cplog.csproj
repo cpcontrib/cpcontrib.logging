@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TeeLogger.cs" />
     <Compile Include="_lib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
