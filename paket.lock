@@ -1,0 +1,8 @@
+NUGET
+  remote: http://nuget.cp-contrib.com/nuget
+    CrownPeak.CMSAPIProxy (1.1.0.9306)
+  remote: https://www.nuget.org/api/v2
+    datagen (0.1.16) - restriction: >= net45
+    FluentAssertions (4.19.4) - restriction: >= net45
+    NUnit (3.9) - restriction: >= net45
+    NUnit3TestAdapter (3.9) - restriction: >= net45
