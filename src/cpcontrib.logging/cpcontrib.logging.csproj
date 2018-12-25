@@ -7,8 +7,8 @@
     <ProjectGuid>{795E4569-B48B-4200-BD5B-9E7E9DEE90D3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>cpcontrib.cplog</RootNamespace>
-    <AssemblyName>cpcontrib.cplog</AssemblyName>
+    <RootNamespace>cpcontrib.logging</RootNamespace>
+    <AssemblyName>cpcontrib.logging</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

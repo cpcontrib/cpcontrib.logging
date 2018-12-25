@@ -1,11 +1,12 @@
-# cpcontrib.cplog
-CPLog for NLog style logging within CrownPeak
+# cpcontrib.logging
+This library strives to achieve a subset of NLog style logging within CrownPeak
 
 ```
-paket install cpcontrib.cplog
+paket install cpcontrib.logging
+cppm install cpcontrib.logging
 ```
 
-CPLog is designed to be similar to NLog logging framework (see NLog).
+cpcontrib.logging is designed to be similar to NLog logging framework (see NLog).
 
 We've also included two default loggers for sending Email and using CrownPeak's Util.Log sink.
 
