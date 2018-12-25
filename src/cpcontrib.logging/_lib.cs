@@ -266,7 +266,7 @@ namespace CPLog
 			ILogger returnVal = null;
 			if(_loggers.ContainsKey(name) == false)
 			{
-				//lock (S_syncobject)
+				//lock(syncRoot)
 				{
 					if(_loggers.ContainsKey(name) == false)
 					{
@@ -692,6 +692,18 @@ namespace CPLog
 		{
 			if(IsDebugEnabled) Debug(string.Format(format, args));
 		}
+
+		public virtual void Debug(Func<string> messageGeneratorFunc)
+		{
+			if(IsDebugEnabled)
+			{
+				try
+				{
+					this.Debug(messageGeneratorFunc());
+				}
+				catch { }
+			}
+		}
 		public virtual void Info(string message)
 		{
 			if(IsInfoEnabled) Out.DebugWriteLine(Name + "|INFO|" + message);
@@ -765,6 +777,7 @@ namespace CPLog
 
 		void Debug(string message);
 		void Debug(string format, params object[] args);
+		void Debug(Func<string> messageGeneratorFunc);
 		void Info(string message);
 		void Info(string format, params object[] args);
 		void Warn(string message);

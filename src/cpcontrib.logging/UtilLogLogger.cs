@@ -149,6 +149,15 @@ namespace CrownPeak.CMSAPI.CustomLibrary
 				WriteToLog(m);
 			}
 		}
+
+		public void Debug(Func<string> messageGeneratorFunc)
+		{
+			if(IsDebugEnabled)
+			{
+				this.Debug(messageGeneratorFunc());
+			}
+		}
+
 		public void Error(Exception exception, string format, params object[] args)
 		{
 			if(IsErrorEnabled)

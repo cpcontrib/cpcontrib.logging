@@ -56,6 +56,14 @@ namespace CrownPeak.CMSAPI.CustomLibrary
 			}
 		}
 
+		public void Debug(Func<string> messageGeneratorFunc)
+		{
+			if(IsDebugEnabled)
+			{
+				this.Debug(messageGeneratorFunc());
+			}
+		}
+
 		public void Warn(Exception exception)
 		{
 			if(IsWarnEnabled) Warn(exception, "Operation warning");
