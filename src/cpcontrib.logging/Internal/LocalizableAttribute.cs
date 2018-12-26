@@ -1,8 +1,5 @@
-﻿// PORTIONS Copyright (c) 2017 NewtonWorks LLC
-//  this code adapts NLog into CrownPeak CMS.
-//
 // 
-// NLOG PORTIONS Copyright (c) 2004-2017 Jaroslaw Kowalski <jaak@jkowalski.net>
+// Copyright (c) 2004-2018 Jaroslaw Kowalski <jaak@jkowalski.net>, Kim Christensen, Julian Verdurmen
 // 
 // All rights reserved.
 // 
@@ -34,3 +31,31 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 // 
 
+#if SILVERLIGHT
+
+namespace System.ComponentModel
+{
+    using System;
+
+    /// <summary>
+    /// Define Localizable attribute for platforms that don't have it.
+    /// </summary>
+    internal class LocalizableAttribute : Attribute
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LocalizableAttribute"/> class.
+        /// </summary>
+        /// <param name="isLocalizable">Determines whether the target is localizable.</param>
+        public LocalizableAttribute(bool isLocalizable)
+        {
+            IsLocalizable = isLocalizable;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the target is localizable.
+        /// </summary>
+        public bool IsLocalizable { get; set; }
+    }
+}
+
+#endif

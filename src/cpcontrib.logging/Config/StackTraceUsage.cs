@@ -1,8 +1,5 @@
-﻿// PORTIONS Copyright (c) 2017 NewtonWorks LLC
-//  this code adapts NLog into CrownPeak CMS.
-//
-// 
-// NLOG PORTIONS Copyright (c) 2004-2017 Jaroslaw Kowalski <jaak@jkowalski.net>
+﻿// 
+// Copyright (c) 2004-2018 Jaroslaw Kowalski <jaak@jkowalski.net>, Kim Christensen, Julian Verdurmen
 // 
 // All rights reserved.
 // 
@@ -34,3 +31,38 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 // 
 
+namespace CPLog.Config
+{
+	/// <summary>
+	/// Value indicating how stack trace should be captured when processing the log event.
+	/// </summary>
+	public enum StackTraceUsage
+	{
+		/// <summary>
+		/// Stack trace should not be captured.
+		/// </summary>
+		None = 0,
+
+		/// <summary>
+		/// Stack trace should be captured without source-level information.
+		/// </summary>
+		WithoutSource = 1,
+
+#if !SILVERLIGHT
+		/// <summary>
+		/// Stack trace should be captured including source-level information such as line numbers.
+		/// </summary>
+		WithSource = 2,
+
+		/// <summary>
+		/// Capture maximum amount of the stack trace information supported on the platform.
+		/// </summary>
+		Max = 2,
+#else
+        /// <summary>
+        /// Capture maximum amount of the stack trace information supported on the platform.
+        /// </summary>
+        Max = 1,
+#endif
+	}
+}

@@ -3,12 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2043
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cpcontrib.logging", "cpcontrib.cplog\cpcontrib.logging.csproj", "{795E4569-B48B-4200-BD5B-9E7E9DEE90D3}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{40230361-DCBE-4F1E-8876-984D1FEDE0EB}"
 	ProjectSection(SolutionItems) = preProject
 		..\paket.dependencies = ..\paket.dependencies
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cpcontrib.logging", "cpcontrib.logging\cpcontrib.logging.csproj", "{795E4569-B48B-4200-BD5B-9E7E9DEE90D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

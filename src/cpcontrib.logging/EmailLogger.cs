@@ -1,11 +1,9 @@
-﻿//! dependency=LMCP.CPLog^0.1.0
+﻿//!packer:targetFile=EmailLogger.cs
+//! dependency=LMCP.CPLog^0.1.0
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using CrownPeak.CMSAPI;
-using CrownPeak.CMSAPI.Services;
-/* Some Namespaces are not allowed. */
+
 namespace CrownPeak.CMSAPI.CustomLibrary
 {
 	/// <summary>

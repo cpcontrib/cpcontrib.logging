@@ -1,8 +1,5 @@
-﻿// PORTIONS Copyright (c) 2017 NewtonWorks LLC
-//  this code adapts NLog into CrownPeak CMS.
-//
 // 
-// NLOG PORTIONS Copyright (c) 2004-2017 Jaroslaw Kowalski <jaak@jkowalski.net>
+// Copyright (c) 2004-2018 Jaroslaw Kowalski <jaak@jkowalski.net>, Kim Christensen, Julian Verdurmen
 // 
 // All rights reserved.
 // 
@@ -34,3 +31,12 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 // 
 
+namespace CPLog
+{
+    /// <summary>
+    /// Returns a log message. Used to defer calculation of 
+    /// the log message until it's actually needed.
+    /// </summary>
+    /// <returns>Log message.</returns>
+    public delegate string LogMessageGenerator();
+}

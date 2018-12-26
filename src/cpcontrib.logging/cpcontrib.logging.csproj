@@ -7,8 +7,8 @@
     <ProjectGuid>{795E4569-B48B-4200-BD5B-9E7E9DEE90D3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>cpcontrib.logging</RootNamespace>
-    <AssemblyName>cpcontrib.logging</AssemblyName>
+    <RootNamespace>CPLog</RootNamespace>
+    <AssemblyName>CPLog</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,7 +39,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Annotations.cs" />
+    <Compile Include="Common\InternalLogger-generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InternalLogger-generated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Common\InternalLogger.cs" />
+    <Compile Include="Config\LoggingConfiguration.cs" />
+    <Compile Include="Config\LoggingRule.cs" />
+    <Compile Include="Config\StackTraceUsage.cs" />
     <Compile Include="EmailLogger.cs" />
+    <Compile Include="Filters\Filter.cs" />
+    <Compile Include="Internal\LocalizableAttribute.cs" />
+    <Compile Include="Internal\TargetWithFilterChain.cs" />
+    <Compile Include="LogFactory.cs" />
+    <Compile Include="Logger-generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Logger-generated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Logger.cs" />
+    <Compile Include="LoggerImpl.cs" />
+    <Compile Include="LogLevel.cs" />
+    <Compile Include="LogManager.cs" />
+    <Compile Include="LogMessageGenerator.cs" />
+    <Compile Include="Targets\Target.cs" />
     <Compile Include="UtilLogLogger.cs" />
     <Compile Include="_lib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,5 +86,18 @@
       <Private>True</Private>
       <Paket>True</Paket>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Common\InternalLogger-generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>InternalLogger-generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Logger-generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Logger-generated.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
 </Project>

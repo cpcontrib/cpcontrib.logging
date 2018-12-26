@@ -1,8 +1,5 @@
-﻿// PORTIONS Copyright (c) 2017 NewtonWorks LLC
-//  this code adapts NLog into CrownPeak CMS.
-//
 // 
-// NLOG PORTIONS Copyright (c) 2004-2017 Jaroslaw Kowalski <jaak@jkowalski.net>
+// Copyright (c) 2004-2018 Jaroslaw Kowalski <jaak@jkowalski.net>, Kim Christensen, Julian Verdurmen
 // 
 // All rights reserved.
 // 
@@ -34,3 +31,24 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 // 
 
+
+namespace CPLog.Config
+{
+    using System;
+	using JetBrains.Annotations;
+
+    /// <summary>
+    /// Marks the object as configuration item for NLog.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class)]
+    [MeansImplicitUse]
+    public sealed class NLogConfigurationItemAttribute : Attribute
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NLogConfigurationItemAttribute"/> class.
+        /// </summary>
+        public NLogConfigurationItemAttribute()
+        {
+        }
+    }
+}

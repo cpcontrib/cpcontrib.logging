@@ -1,11 +1,8 @@
-﻿//! dependency=LMCP.CPLog^0.1.0
+﻿//!packer:targetFile=UtilLogLogger.cs
+//! dependency=LMCP.CPLog^0.1.0
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using CrownPeak.CMSAPI;
-using CrownPeak.CMSAPI.Services;
-/* Some Namespaces are not allowed. */
+
 namespace CrownPeak.CMSAPI.CustomLibrary
 {
 	/// <summary>
@@ -154,7 +151,11 @@ namespace CrownPeak.CMSAPI.CustomLibrary
 		{
 			if(IsDebugEnabled)
 			{
-				this.Debug(messageGeneratorFunc());
+				try { this.Debug(messageGeneratorFunc()); }
+				catch(Exception ex)
+				{
+					InternalLogger_LogException(ex);
+				}
 			}
 		}
 
@@ -215,17 +216,22 @@ namespace CrownPeak.CMSAPI.CustomLibrary
 			}
 			catch(Exception ex)
 			{
-				//if log exceptions==true
-				StringBuilder sb = new StringBuilder();
-				sb.AppendLine("Message to log: -------------------");
-				sb.AppendLine(message);
-				sb.AppendLine();
-				sb.AppendLine("Exception: -------------------");
-				sb.AppendLine(ex.ToString());
-
-				string errorEmailDest = "eric.newton@lightmaker.com";
-				Util.Email("UtilLogLogger failure: " + ex.Message, sb.ToString(), errorEmailDest);
+				InternalLogger_LogException(ex);
 			}
+		}
+
+		private void InternalLogger_LogException(Exception ex)
+		{
+			//if log exceptions==true
+			StringBuilder sb = new StringBuilder();
+			//sb.AppendLine("Message to log: -------------------");
+			//sb.AppendLine(message);
+			//sb.AppendLine();
+			sb.AppendLine("Exception: -------------------");
+			sb.AppendLine(ex.ToString());
+
+			string errorEmailDest = "eric@hipskip.ca";
+			Util.Email("UtilLogLogger failure: " + ex.Message, sb.ToString(), errorEmailDest);
 		}
 
 
