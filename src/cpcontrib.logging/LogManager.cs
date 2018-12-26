@@ -40,12 +40,12 @@ namespace CPLog
     using System.Reflection;
     using System.Runtime.CompilerServices;
 
-    using NLog.Common;
-    using NLog.Config;
-    using NLog.Internal;
+    using CPLog.Common;
+    using CPLog.Config;
+    using CPLog.Internal;
 
     /// <summary>
-    /// Creates and manages instances of <see cref="T:NLog.Logger" /> objects.
+    /// Creates and manages instances of <see cref="T:CPLog.Logger" /> objects.
     /// </summary>
     public static class LogManager
     {
@@ -66,7 +66,7 @@ namespace CPLog
         public delegate CultureInfo GetCultureInfo();
 
         /// <summary>
-        /// Gets the <see cref="NLog.LogFactory" /> instance used in the <see cref="LogManager"/>.
+        /// Gets the <see cref="CPLog.LogFactory" /> instance used in the <see cref="LogManager"/>.
         /// </summary>
         /// <remarks>Could be used to pass the to other methods</remarks>
         public static LogFactory LogFactory => factory;
@@ -127,7 +127,7 @@ namespace CPLog
 
         /// <summary>
         /// Gets or sets the current logging configuration.
-        /// <see cref="NLog.LogFactory.Configuration" />
+        /// <see cref="CPLog.LogFactory.Configuration" />
         /// </summary>
         public static LoggingConfiguration Configuration
         {
@@ -247,7 +247,7 @@ namespace CPLog
         /// <param name="name">Name of the logger.</param>
         /// <param name="loggerType">The logger class. The class must inherit from <see cref="Logger" />.</param>
         /// <returns>The logger of type <paramref name="loggerType"/>. Multiple calls to <c>GetLogger</c> with the same argument aren't guaranteed to return the same logger reference.</returns>
-        /// <remarks>The generic way for this method is <see cref="NLog.LogFactory{loggerType}.GetLogger(string)"/></remarks>
+        /// <remarks>The generic way for this method is <see cref="CPLog.LogFactory{loggerType}.GetLogger(string)"/></remarks>
         [CLSCompliant(false)]
         public static Logger GetLogger(string name, Type loggerType)
         {

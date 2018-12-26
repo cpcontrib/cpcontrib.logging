@@ -278,7 +278,7 @@ namespace CPLog
 		}
 
 		/// <summary>
-		/// Returns the <see cref="T:NLog.LogLevel"/> that corresponds to the supplied <see langword="string" />.
+		/// Returns the <see cref="T:CPLog.LogLevel"/> that corresponds to the supplied <see langword="string" />.
 		/// </summary>
 		/// <param name="levelName">The textual representation of the log level.</param>
 		/// <returns>The enumeration value.</returns>
@@ -365,10 +365,10 @@ namespace CPLog
 		}
 
 		/// <summary>
-		/// Determines whether the specified <see cref="NLog.LogLevel"/> instance is equal to this instance.
+		/// Determines whether the specified <see cref="CPLog.LogLevel"/> instance is equal to this instance.
 		/// </summary>
-		/// <param name="other">The <see cref="NLog.LogLevel"/> to compare with this instance.</param>
-		/// <returns>Value of <c>true</c> if the specified <see cref="NLog.LogLevel"/> is equal to 
+		/// <param name="other">The <see cref="CPLog.LogLevel"/> to compare with this instance.</param>
+		/// <returns>Value of <c>true</c> if the specified <see cref="CPLog.LogLevel"/> is equal to 
 		/// this instance; otherwise, <c>false</c>.</returns>
 		public bool Equals(LogLevel other)
 		{

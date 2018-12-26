@@ -103,7 +103,7 @@ namespace CPLog.Config
         public ReadOnlyCollection<Target> ConfiguredNamedTargets => GetAllTargetsThreadSafe().AsReadOnly();
 
         /// <summary>
-        /// Gets the collection of file names which should be watched for changes by NLog.
+        /// Gets the collection of file names which should be watched for changes by CPLog.
         /// </summary>
         public virtual IEnumerable<string> FileNamesToWatch => ArrayHelper.Empty<string>();
 		/// <summary>

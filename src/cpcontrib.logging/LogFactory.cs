@@ -57,7 +57,7 @@ namespace CPLog
 #endif
 
     /// <summary>
-    /// Creates and manages instances of <see cref="T:NLog.Logger" /> objects.
+    /// Creates and manages instances of <see cref="T:CPLog.Logger" /> objects.
     /// </summary>
     public class LogFactory : IDisposable
     {
@@ -331,7 +331,7 @@ namespace CPLog
         private void TryLoadFromAndroidAssets()
         {
 //try nlog.config in assets folder
-            const string nlogConfigFilename = "NLog.config";
+            const string nlogConfigFilename = "CPLog.config";
             try
             {
                 using (var stream = Android.App.Application.Context.Assets.Open(nlogConfigFilename))
@@ -1107,8 +1107,8 @@ namespace CPLog
         /// </summary>
         private static IEnumerable<string> GetDefaultCandidateConfigFilePaths(string fileName = null)
         {
-            // NLog.config from application directory
-            string nlogConfigFile = fileName ?? "NLog.config";
+            // CPLog.config from application directory
+            string nlogConfigFile = fileName ?? "CPLog.config";
             string baseDirectory = PathHelpers.TrimDirectorySeparators(CurrentAppDomain?.BaseDirectory);
             if (!string.IsNullOrEmpty(baseDirectory))
                 yield return Path.Combine(baseDirectory, nlogConfigFile);
@@ -1173,7 +1173,7 @@ namespace CPLog
 #if !SILVERLIGHT && !NETSTANDARD1_0
             if (fileName == null)
             {
-                // Get path to NLog.dll.nlog only if the assembly is not in the GAC
+                // Get path to CPLog.dll.nlog only if the assembly is not in the GAC
                 var nlogAssembly = typeof(LogFactory).GetAssembly();
                 if (!string.IsNullOrEmpty(nlogAssembly?.Location) && !nlogAssembly.GlobalAssemblyCache)
                 {

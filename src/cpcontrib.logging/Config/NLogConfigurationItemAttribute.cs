@@ -38,7 +38,7 @@ namespace CPLog.Config
 	using JetBrains.Annotations;
 
     /// <summary>
-    /// Marks the object as configuration item for NLog.
+    /// Marks the object as configuration item for CPLog.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     [MeansImplicitUse]

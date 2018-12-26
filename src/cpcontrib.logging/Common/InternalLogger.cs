@@ -40,8 +40,8 @@ namespace CPLog.Common
     //using System.IO;
     //using System.Reflection;
     using System.Text;
-    using NLog.Internal;
-    using NLog.Time;
+    using CPLog.Internal;
+    using CPLog.Time;
 
     /// <summary>
     /// NLog internal logger.
@@ -94,7 +94,7 @@ namespace CPLog.Common
         /// <summary>
         /// Gets or sets the minimal internal log level. 
         /// </summary>
-        /// <example>If set to <see cref="NLog.LogLevel.Info"/>, then messages of the levels <see cref="NLog.LogLevel.Info"/>, <see cref="NLog.LogLevel.Error"/> and <see cref="NLog.LogLevel.Fatal"/> will be written.</example>
+        /// <example>If set to <see cref="CPLog.LogLevel.Info"/>, then messages of the levels <see cref="CPLog.LogLevel.Info"/>, <see cref="CPLog.LogLevel.Error"/> and <see cref="CPLog.LogLevel.Fatal"/> will be written.</example>
         public static LogLevel LogLevel { get { return _logLevel; } set { _logLevel = value ?? LogLevel.Info; } }
         private static LogLevel _logLevel;
 
