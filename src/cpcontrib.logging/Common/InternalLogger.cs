@@ -38,7 +38,8 @@ namespace CPLog.Common
     using System.ComponentModel;
     using System.Globalization;
     //using System.IO;
-    //using System.Reflection;
+    using System.
+		Reflection;
     using System.Text;
     using CPLog.Internal;
     using CPLog.Time;
@@ -367,7 +368,8 @@ namespace CPLog.Common
             {
                 return;
             }
-
+			//Util.Log(message);
+			/*
             lock (LockObject)
             {
                 using (var textWriter = File.AppendText(logFile))
@@ -375,6 +377,7 @@ namespace CPLog.Common
                     textWriter.WriteLine(message);
                 }
             }
+			*/
         }
 
         /// <summary>
@@ -517,9 +520,11 @@ namespace CPLog.Common
         {
             try
             {
+				/*
                 string settingValue = GetAppSettings(configName);
                 if (settingValue != null)
                     return settingValue;
+				*/
             }
             catch (Exception ex)
             {
@@ -531,9 +536,11 @@ namespace CPLog.Common
 
             try
             {
+				/*
                 string settingValue = EnvironmentHelper.GetSafeEnvironmentVariable(envName);
                 if (!string.IsNullOrEmpty(settingValue))
                     return settingValue;
+				*/
             }
             catch (Exception ex)
             {
@@ -542,7 +549,7 @@ namespace CPLog.Common
                     throw;
                 }
             }
-
+			
             return null;
         }
 
@@ -596,7 +603,7 @@ namespace CPLog.Common
         private static void CreateDirectoriesIfNeeded(string filename)
         {
             return; //cant do this in CP
-			
+			/* cant do this in CP
 			try
             {
                 if (LogLevel == LogLevel.Off)
@@ -619,6 +626,7 @@ namespace CPLog.Common
                     throw;
                 }
             }
+			*/
         }
 #endif
 	}

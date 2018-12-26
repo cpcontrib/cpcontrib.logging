@@ -40,6 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Annotations.cs" />
+    <Compile Include="Common\AsyncContinuation.cs" />
+    <Compile Include="Common\AsyncHelpers.cs" />
+    <Compile Include="Common\AsynchronousAction.cs" />
     <Compile Include="Common\InternalLogger-generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -47,12 +50,53 @@
     </Compile>
     <Compile Include="Common\InternalLogger.cs" />
     <Compile Include="Config\LoggingConfiguration.cs" />
+    <Compile Include="Config\LoggingConfigurationChangedEventArgs.cs" />
+    <Compile Include="Config\LoggingConfigurationReloadedEventArgs.cs" />
     <Compile Include="Config\LoggingRule.cs" />
+    <Compile Include="Config\NameBaseAttribute.cs" />
+    <Compile Include="Config\NLogConfigurationItemAttribute.cs" />
+    <Compile Include="Config\RequiredParameterAttribute.cs" />
     <Compile Include="Config\StackTraceUsage.cs" />
-    <Compile Include="EmailLogger.cs" />
+    <None Include="EmailLogger.cs" />
     <Compile Include="Filters\Filter.cs" />
+    <Compile Include="Filters\FilterResult.cs" />
+    <Compile Include="ILogger.cs" />
+    <Compile Include="ILoggerBase.cs" />
+    <Compile Include="Internal\ArrayHelper.cs" />
+    <Compile Include="Internal\EnvironmentHelper.cs" />
+    <Compile Include="Internal\ExceptionHelper.cs" />
+    <Compile Include="Internal\FactoryHelper.cs" />
+    <Compile Include="Internal\Fakeables\AppDomainWrapper.cs" />
+    <Compile Include="Internal\Fakeables\FakeAppDomain.cs" />
+    <Compile Include="Internal\Fakeables\FileWrapper.cs" />
+    <Compile Include="Internal\Fakeables\IAppDomain.cs" />
+    <Compile Include="Internal\Fakeables\IFile.cs" />
+    <Compile Include="Internal\ILogMessageFormatter.cs" />
+    <Compile Include="Internal\IRenderable.cs" />
+    <Compile Include="Internal\ISupportsInitialize.cs" />
+    <Compile Include="Internal\IUsesStackTrace.cs" />
     <Compile Include="Internal\LocalizableAttribute.cs" />
+    <Compile Include="Internal\LoggerConfiguration.cs" />
+    <Compile Include="Internal\LogMessageTemplateFormatter.cs" />
+    <Compile Include="Internal\MruCache.cs" />
+    <Compile Include="Internal\PropertiesDictionary.cs" />
+    <Compile Include="Internal\ReflectionHelpers.cs" />
+    <Compile Include="Internal\SingleCallContinuation.cs" />
+    <Compile Include="Internal\SingleItemOptimizedHashSet.cs" />
+    <Compile Include="Internal\StackTraceUsageUtils.cs" />
+    <Compile Include="Internal\StringBuilderExt.cs" />
+    <Compile Include="Internal\StringBuilderPool.cs" />
+    <Compile Include="Internal\StringHelpers.cs" />
     <Compile Include="Internal\TargetWithFilterChain.cs" />
+    <Compile Include="Internal\TimeoutContinuation.cs" />
+    <Compile Include="ISuppress.cs" />
+    <Compile Include="IValueFormatter.cs" />
+    <Compile Include="LayoutRenderers\LayoutRenderer.cs" />
+    <Compile Include="LayoutRenderers\LayoutRendererAttribute.cs" />
+    <Compile Include="Layouts\Layout.cs" />
+    <Compile Include="Layouts\LayoutAttribute.cs" />
+    <Compile Include="Layouts\SimpleLayout.cs" />
+    <Compile Include="LogEventInfo.cs" />
     <Compile Include="LogFactory.cs" />
     <Compile Include="Logger-generated.cs">
       <AutoGen>True</AutoGen>
@@ -63,9 +107,29 @@
     <Compile Include="LoggerImpl.cs" />
     <Compile Include="LogLevel.cs" />
     <Compile Include="LogManager.cs" />
+    <Compile Include="LogMessageFormatter.cs" />
     <Compile Include="LogMessageGenerator.cs" />
+    <Compile Include="MessageTemplateFormatMethodAttribute.cs" />
+    <Compile Include="MessageTemplates\CaptureType.cs" />
+    <Compile Include="MessageTemplates\Hole.cs" />
+    <Compile Include="MessageTemplates\Literal.cs" />
+    <Compile Include="MessageTemplates\LiteralHole.cs" />
+    <Compile Include="MessageTemplates\MessageTemplateParameter.cs" />
+    <Compile Include="MessageTemplates\Template.cs" />
+    <Compile Include="MessageTemplates\TemplateEnumerator.cs" />
+    <Compile Include="MessageTemplates\TemplateParserException.cs" />
+    <Compile Include="MessageTemplates\TemplateRenderer.cs" />
+    <Compile Include="MessageTemplates\ValueFormatter.cs" />
+    <Compile Include="NLogConfigurationException.cs" />
+    <Compile Include="NLogRuntimeException.cs" />
     <Compile Include="Targets\Target.cs" />
-    <Compile Include="UtilLogLogger.cs" />
+    <None Include="UtilLogLogger.cs" />
+    <Compile Include="Time\AccurateLocalTimeSource.cs" />
+    <Compile Include="Time\AccurateUtcTimeSource.cs" />
+    <Compile Include="Time\CachedTimeSource.cs" />
+    <Compile Include="Time\FastLocalTimeSource.cs" />
+    <Compile Include="Time\TimeSource.cs" />
+    <Compile Include="Time\TimeSourceAttribute.cs" />
     <Compile Include="_lib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

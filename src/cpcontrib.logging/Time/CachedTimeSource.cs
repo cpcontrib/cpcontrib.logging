@@ -1,4 +1,4 @@
-﻿// 
+// 
 // Copyright (c) 2004-2018 Jaroslaw Kowalski <jaak@jkowalski.net>, Kim Christensen, Julian Verdurmen
 // 
 // All rights reserved.
@@ -31,51 +31,41 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 // 
 
-namespace CPLog.Filters
+namespace CPLog.Time
 {
-    using Config;
+    using System;
 
     /// <summary>
-    /// An abstract filter class. Provides a way to eliminate log messages
-    /// based on properties other than logger name and log level.
+    /// Fast time source that updates current time only once per tick (15.6 milliseconds).
     /// </summary>
-    [NLogConfigurationItem]
-    public abstract class Filter
+    public abstract class CachedTimeSource : TimeSource
     {
+        private int _lastTicks = -1;
+        private DateTime _lastTime = DateTime.MinValue;
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="Filter" /> class.
+        /// Gets raw uncached time from derived time source.
         /// </summary>
-        protected Filter()
+        protected abstract DateTime FreshTime { get; }
+
+        /// <summary>
+        /// Gets current time cached for one system tick (15.6 milliseconds).
+        /// </summary>
+        public override DateTime Time
         {
-            Action = FilterResult.Neutral;
+            get
+            {
+                int tickCount = Environment.TickCount;
+                if (tickCount == _lastTicks)
+                    return _lastTime;
+                else
+                {
+                    DateTime time = FreshTime;
+                    _lastTicks = tickCount;
+                    _lastTime = time;
+                    return time;
+                }
+            }
         }
-
-        /// <summary>
-        /// Gets or sets the action to be taken when filter matches.
-        /// </summary>
-        /// <docgen category='Filtering Options' order='10' />
-        [RequiredParameter]
-        public FilterResult Action { get; set; }
-
-        /// <summary>
-        /// Gets the result of evaluating filter against given log event.
-        /// </summary>
-        /// <param name="logEvent">The log event.</param>
-        /// <returns>Filter result.</returns>
-        internal FilterResult GetFilterResult(LogEventInfo logEvent)
-        {
-            return Check(logEvent);
-        }
-
-        /// <summary>
-        /// Checks whether log event should be logged or not.
-        /// </summary>
-        /// <param name="logEvent">Log event.</param>
-        /// <returns>
-        /// <see cref="FilterResult.Ignore"/> - if the log event should be ignored<br/>
-        /// <see cref="FilterResult.Neutral"/> - if the filter doesn't want to decide<br/>
-        /// <see cref="FilterResult.Log"/> - if the log event should be logged<br/>
-        /// .</returns>
-        protected abstract FilterResult Check(LogEventInfo logEvent);
     }
 }

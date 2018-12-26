@@ -31,51 +31,27 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 // 
 
-namespace CPLog.Filters
-{
-    using Config;
+using System;
+using System.Text;
 
-    /// <summary>
-    /// An abstract filter class. Provides a way to eliminate log messages
-    /// based on properties other than logger name and log level.
-    /// </summary>
-    [NLogConfigurationItem]
-    public abstract class Filter
+namespace CPLog
+{
+	using CPLog.MessageTemplates;
+
+	/// <summary>
+	/// Render a message template property to a string
+	/// </summary>
+	public interface IValueFormatter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Filter" /> class.
+        /// Serialization of an object, e.g. JSON and append to <paramref name="builder"/>
         /// </summary>
-        protected Filter()
-        {
-            Action = FilterResult.Neutral;
-        }
-
-        /// <summary>
-        /// Gets or sets the action to be taken when filter matches.
-        /// </summary>
-        /// <docgen category='Filtering Options' order='10' />
-        [RequiredParameter]
-        public FilterResult Action { get; set; }
-
-        /// <summary>
-        /// Gets the result of evaluating filter against given log event.
-        /// </summary>
-        /// <param name="logEvent">The log event.</param>
-        /// <returns>Filter result.</returns>
-        internal FilterResult GetFilterResult(LogEventInfo logEvent)
-        {
-            return Check(logEvent);
-        }
-
-        /// <summary>
-        /// Checks whether log event should be logged or not.
-        /// </summary>
-        /// <param name="logEvent">Log event.</param>
-        /// <returns>
-        /// <see cref="FilterResult.Ignore"/> - if the log event should be ignored<br/>
-        /// <see cref="FilterResult.Neutral"/> - if the filter doesn't want to decide<br/>
-        /// <see cref="FilterResult.Log"/> - if the log event should be logged<br/>
-        /// .</returns>
-        protected abstract FilterResult Check(LogEventInfo logEvent);
+        /// <param name="value">The object to serialize to string.</param>
+        /// <param name="format">Parameter Format</param>
+        /// <param name="captureType">Parameter CaptureType</param>
+        /// <param name="formatProvider">An object that supplies culture-specific formatting information.</param>
+        /// <param name="builder">Output destination.</param>
+        /// <returns>Serialize succeeded (true/false)</returns>
+        bool FormatValue(object value, string format, CaptureType captureType, IFormatProvider formatProvider, StringBuilder builder);
     }
 }

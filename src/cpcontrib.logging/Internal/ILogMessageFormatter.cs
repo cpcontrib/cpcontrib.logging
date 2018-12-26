@@ -31,51 +31,34 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 // 
 
-namespace CPLog.Filters
+namespace CPLog.Internal
 {
-    using Config;
+    using System.Text;
 
     /// <summary>
-    /// An abstract filter class. Provides a way to eliminate log messages
-    /// based on properties other than logger name and log level.
+    /// Format a log message
     /// </summary>
-    [NLogConfigurationItem]
-    public abstract class Filter
+    internal interface ILogMessageFormatter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Filter" /> class.
+        /// Format the message and return
         /// </summary>
-        protected Filter()
-        {
-            Action = FilterResult.Neutral;
-        }
+        /// <param name="logEvent">LogEvent with message to be formatted</param>
+        /// <returns>formatted message</returns>
+        string FormatMessage(LogEventInfo logEvent);
 
         /// <summary>
-        /// Gets or sets the action to be taken when filter matches.
+        /// Has the logevent properties?
         /// </summary>
-        /// <docgen category='Filtering Options' order='10' />
-        [RequiredParameter]
-        public FilterResult Action { get; set; }
+        /// <param name="logEvent">LogEvent with message to be formatted</param>
+        /// <returns>False when logevent has no properties to be extracted</returns>
+        bool HasProperties(LogEventInfo logEvent);
 
         /// <summary>
-        /// Gets the result of evaluating filter against given log event.
+        /// Appends the logevent message to the provided StringBuilder
         /// </summary>
-        /// <param name="logEvent">The log event.</param>
-        /// <returns>Filter result.</returns>
-        internal FilterResult GetFilterResult(LogEventInfo logEvent)
-        {
-            return Check(logEvent);
-        }
-
-        /// <summary>
-        /// Checks whether log event should be logged or not.
-        /// </summary>
-        /// <param name="logEvent">Log event.</param>
-        /// <returns>
-        /// <see cref="FilterResult.Ignore"/> - if the log event should be ignored<br/>
-        /// <see cref="FilterResult.Neutral"/> - if the filter doesn't want to decide<br/>
-        /// <see cref="FilterResult.Log"/> - if the log event should be logged<br/>
-        /// .</returns>
-        protected abstract FilterResult Check(LogEventInfo logEvent);
+        /// <param name="logEvent">LogEvent with message to be formatted</param>
+        /// <param name="builder">The <see cref="StringBuilder"/> to append the formatted message.</param>
+        void AppendFormattedMessage(LogEventInfo logEvent, StringBuilder builder);
     }
 }

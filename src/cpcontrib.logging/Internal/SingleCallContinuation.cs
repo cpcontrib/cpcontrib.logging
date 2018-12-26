@@ -1,4 +1,4 @@
-﻿// 
+// 
 // Copyright (c) 2004-2018 Jaroslaw Kowalski <jaak@jkowalski.net>, Kim Christensen, Julian Verdurmen
 // 
 // All rights reserved.
@@ -31,51 +31,53 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 // 
 
-namespace CPLog.Filters
+namespace CPLog.Internal
 {
-    using Config;
+    using System;
+    using System.Threading;
+    using Common;
 
     /// <summary>
-    /// An abstract filter class. Provides a way to eliminate log messages
-    /// based on properties other than logger name and log level.
+    /// Implements a single-call guard around given continuation function.
     /// </summary>
-    [NLogConfigurationItem]
-    public abstract class Filter
+    internal class SingleCallContinuation
     {
+        private AsyncContinuation _asyncContinuation;
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="Filter" /> class.
+        /// Initializes a new instance of the <see cref="SingleCallContinuation"/> class.
         /// </summary>
-        protected Filter()
+        /// <param name="asyncContinuation">The asynchronous continuation.</param>
+        public SingleCallContinuation(AsyncContinuation asyncContinuation)
         {
-            Action = FilterResult.Neutral;
+            _asyncContinuation = asyncContinuation;
         }
 
         /// <summary>
-        /// Gets or sets the action to be taken when filter matches.
+        /// Continuation function which implements the single-call guard.
         /// </summary>
-        /// <docgen category='Filtering Options' order='10' />
-        [RequiredParameter]
-        public FilterResult Action { get; set; }
-
-        /// <summary>
-        /// Gets the result of evaluating filter against given log event.
-        /// </summary>
-        /// <param name="logEvent">The log event.</param>
-        /// <returns>Filter result.</returns>
-        internal FilterResult GetFilterResult(LogEventInfo logEvent)
+        /// <param name="exception">The exception.</param>
+        public void Function(Exception exception)
         {
-            return Check(logEvent);
-        }
+            try
+            {
+                var cont = Interlocked.Exchange(ref _asyncContinuation, null);
+                if (cont != null)
+                {
+                    cont(exception);
+                }
+            }
+            catch (Exception ex)
+            {
+                InternalLogger.Error(ex, "Exception in asynchronous handler.");
 
-        /// <summary>
-        /// Checks whether log event should be logged or not.
-        /// </summary>
-        /// <param name="logEvent">Log event.</param>
-        /// <returns>
-        /// <see cref="FilterResult.Ignore"/> - if the log event should be ignored<br/>
-        /// <see cref="FilterResult.Neutral"/> - if the filter doesn't want to decide<br/>
-        /// <see cref="FilterResult.Log"/> - if the log event should be logged<br/>
-        /// .</returns>
-        protected abstract FilterResult Check(LogEventInfo logEvent);
+                if (ex.MustBeRethrown())
+                {
+                    throw;
+                }
+
+                
+            }
+        }
     }
 }

@@ -34,6 +34,9 @@
 
 namespace CPLog
 {
+    using System;
+    using System.Collections.Generic;
+    using CPLog.Internal;
 
 	/// <summary>
 	/// Defines available log levels.
@@ -176,14 +179,6 @@ namespace CPLog
 			return level1.Ordinal != level2.Ordinal;
 		}
 
-		private static class ParameterUtils
-		{
-			public static void AssertNotNull(object source, string parametername)
-			{
-				//if (source == null) throw new ArgumentNullException(parametername);
-			}
-		}
-
 		/// <summary>
 		/// Compares two <see cref="LogLevel"/> objects 
 		/// and returns a value indicating whether 
@@ -194,8 +189,8 @@ namespace CPLog
 		/// <returns>The value of <c>level1.Ordinal &gt; level2.Ordinal</c>.</returns>
 		public static bool operator >(LogLevel level1, LogLevel level2)
 		{
-			ParameterUtils.AssertNotNull(level1, "level1");
-			ParameterUtils.AssertNotNull(level2, "level2");
+            if (level1 == null) { throw new ArgumentNullException(nameof(level1)); }
+            if (level2 == null) { throw new ArgumentNullException(nameof(level2)); }
 
 			return level1.Ordinal > level2.Ordinal;
 		}
@@ -210,8 +205,8 @@ namespace CPLog
 		/// <returns>The value of <c>level1.Ordinal &gt;= level2.Ordinal</c>.</returns>
 		public static bool operator >=(LogLevel level1, LogLevel level2)
 		{
-			ParameterUtils.AssertNotNull(level1, "level1");
-			ParameterUtils.AssertNotNull(level2, "level2");
+            if (level1 == null) { throw new ArgumentNullException(nameof(level1)); }
+            if (level2 == null) { throw new ArgumentNullException(nameof(level2)); }
 
 			return level1.Ordinal >= level2.Ordinal;
 		}
@@ -225,9 +220,9 @@ namespace CPLog
 		/// <param name="level2">The second level.</param>
 		/// <returns>The value of <c>level1.Ordinal &lt; level2.Ordinal</c>.</returns>
 		public static bool operator <(LogLevel level1, LogLevel level2)
-		{
-			ParameterUtils.AssertNotNull(level1, "level1");
-			ParameterUtils.AssertNotNull(level2, "level2");
+        {
+            if (level1 == null) { throw new ArgumentNullException(nameof(level1)); }
+            if (level2 == null) { throw new ArgumentNullException(nameof(level2)); }
 
 			return level1.Ordinal < level2.Ordinal;
 		}
@@ -242,8 +237,8 @@ namespace CPLog
 		/// <returns>The value of <c>level1.Ordinal &lt;= level2.Ordinal</c>.</returns>
 		public static bool operator <=(LogLevel level1, LogLevel level2)
 		{
-			ParameterUtils.AssertNotNull(level1, "level1");
-			ParameterUtils.AssertNotNull(level2, "level2");
+            if (level1 == null) { throw new ArgumentNullException(nameof(level1)); }
+            if (level2 == null) { throw new ArgumentNullException(nameof(level2)); }
 
 			return level1.Ordinal <= level2.Ordinal;
 		}

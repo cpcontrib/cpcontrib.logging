@@ -1,4 +1,4 @@
-﻿// 
+// 
 // Copyright (c) 2004-2018 Jaroslaw Kowalski <jaak@jkowalski.net>, Kim Christensen, Julian Verdurmen
 // 
 // All rights reserved.
@@ -31,51 +31,56 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 // 
 
-namespace CPLog.Filters
+namespace CPLog.Internal.Fakeables
 {
-    using Config;
+    using System;
+    using System.Reflection;
+    using System.Collections.Generic;
 
     /// <summary>
-    /// An abstract filter class. Provides a way to eliminate log messages
-    /// based on properties other than logger name and log level.
+    /// Interface for fakeable the current <see cref="LogFactory.CurrentAppDomain"/>. Not fully implemented, please methods/properties as necessary.
     /// </summary>
-    [NLogConfigurationItem]
-    public abstract class Filter
+    public interface IAppDomain
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Filter" /> class.
+        /// Gets or sets the base directory that the assembly resolver uses to probe for assemblies.
         /// </summary>
-        protected Filter()
-        {
-            Action = FilterResult.Neutral;
-        }
+        string BaseDirectory { get; }
 
         /// <summary>
-        /// Gets or sets the action to be taken when filter matches.
+        /// Gets or sets the name of the configuration file for an application domain.
         /// </summary>
-        /// <docgen category='Filtering Options' order='10' />
-        [RequiredParameter]
-        public FilterResult Action { get; set; }
+        string ConfigurationFile { get; }
 
         /// <summary>
-        /// Gets the result of evaluating filter against given log event.
+        /// Gets or sets the list of directories under the application base directory that are probed for private assemblies.
         /// </summary>
-        /// <param name="logEvent">The log event.</param>
-        /// <returns>Filter result.</returns>
-        internal FilterResult GetFilterResult(LogEventInfo logEvent)
-        {
-            return Check(logEvent);
-        }
+        IEnumerable<string> PrivateBinPath { get; }
 
         /// <summary>
-        /// Checks whether log event should be logged or not.
+        /// Gets or set the friendly name.
         /// </summary>
-        /// <param name="logEvent">Log event.</param>
-        /// <returns>
-        /// <see cref="FilterResult.Ignore"/> - if the log event should be ignored<br/>
-        /// <see cref="FilterResult.Neutral"/> - if the filter doesn't want to decide<br/>
-        /// <see cref="FilterResult.Log"/> - if the log event should be logged<br/>
-        /// .</returns>
-        protected abstract FilterResult Check(LogEventInfo logEvent);
+        string FriendlyName { get; }
+
+        /// <summary>
+        /// Gets an integer that uniquely identifies the application domain within the process. 
+        /// </summary>
+        int Id { get; }
+
+        /// <summary>
+        /// Gets the assemblies that have been loaded into the execution context of this application domain.
+        /// </summary>
+        /// <returns>A list of assemblies in this application domain.</returns>
+        IEnumerable<Assembly> GetAssemblies();
+
+        /// <summary>
+        /// Process exit event.
+        /// </summary>
+        event EventHandler<EventArgs> ProcessExit;
+        
+        /// <summary>
+        /// Domain unloaded event.
+        /// </summary>
+        event EventHandler<EventArgs> DomainUnload;
     }
 }

@@ -61,13 +61,15 @@ namespace CPLog
     /// </summary>
     public class LogFactory : IDisposable
     {
+#if CPLOG_IGNORE
 #if !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
-        private const int ReconfigAfterFileChangedTimeout = 1000;
+		private const int ReconfigAfterFileChangedTimeout = 1000;
         internal Timer _reloadTimer;
         private readonly MultiFileWatcher _watcher;
 #endif
+#endif
 
-        private static readonly TimeSpan DefaultFlushTimeout = TimeSpan.FromSeconds(15);
+		private static readonly TimeSpan DefaultFlushTimeout = TimeSpan.FromSeconds(15);
 
         private static IAppDomain currentAppDomain;
 
@@ -88,15 +90,15 @@ namespace CPLog
         /// When this property is <c>null</c>, the default file paths (<see cref="GetCandidateConfigFilePaths"/> are used.
         /// </summary>
         private List<string> _candidateConfigFilePaths;
-
-        private static readonly FileWrapper DefaultFileWrapper = new FileWrapper();
+#if CPLOG_IGNORE
+		private static readonly FileWrapper DefaultFileWrapper = new FileWrapper();
 
         private readonly IFile _file = DefaultFileWrapper;
-
-        /// <summary>
-        /// Occurs when logging <see cref="Configuration" /> changes.
-        /// </summary>
-        public event EventHandler<LoggingConfigurationChangedEventArgs> ConfigurationChanged;
+#endif
+		/// <summary>
+		/// Occurs when logging <see cref="Configuration" /> changes.
+		/// </summary>
+		public event EventHandler<LoggingConfigurationChangedEventArgs> ConfigurationChanged;
 
 #if !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
         /// <summary>
@@ -123,7 +125,7 @@ namespace CPLog
         /// </summary>
         public LogFactory()
         {
-#if !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
+#if CPLOG_IGNORE && !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
             _watcher = new MultiFileWatcher();
             _watcher.FileChanged += ConfigFileChanged;
             LoggerShutdown += OnStopLogging;
@@ -140,21 +142,23 @@ namespace CPLog
             Configuration = config;
         }
 
-        /// <summary>
-        ///  Initializes a new instance of the <see cref="LogFactory" /> class with mocks
-        /// </summary>
-        /// <param name="config"></param>
-        /// <param name="file"></param>
-        internal LogFactory(LoggingConfiguration config, IFile file) : this(config)
+#if CPLOG_IGNORE
+		/// <summary>
+		///  Initializes a new instance of the <see cref="LogFactory" /> class with mocks
+		/// </summary>
+		/// <param name="config"></param>
+		/// <param name="file"></param>
+		internal LogFactory(LoggingConfiguration config, IFile file) : this(config)
         {
             _file = file;
         }
+#endif
 
-
-        /// <summary>
-        /// Gets the current <see cref="IAppDomain"/>.
-        /// </summary>
-        public static IAppDomain CurrentAppDomain
+		/// <summary>
+		/// Gets the current <see cref="IAppDomain"/>.
+		/// </summary>
+		[Obsolete("CPLog needs this removed")]
+		public static IAppDomain CurrentAppDomain
         {
             get
             {
@@ -217,11 +221,11 @@ namespace CPLog
                 {
                     if (_configLoaded || _isDisposing)
                         return _config;
-
+#if CPLOG_IGNORE
 #if !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD
-                    //load
+					//load
 
-                    if (_config == null)
+					if (_config == null)
                     {
                         TryLoadFromAppConfig();
                     }
@@ -231,14 +235,14 @@ namespace CPLog
                     {
                         TryLoadFromFilePaths();
                     }
-
-                    if (_config != null)
+#endif
+					if (_config != null)
                     {
                         try
                         {
                             _config.Dump();
                             ReconfigExistingLoggers();
-#if !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
+#if CPLOG_IGNORE && !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
                             TryWachtingConfigFile();
 #endif
                             LogConfigurationInitialized();
@@ -255,7 +259,7 @@ namespace CPLog
 
             set
             {
-#if !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
+#if CPLOG_IGNORE && !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
                 try
                 {
                     _watcher.StopWatching();
@@ -291,7 +295,7 @@ namespace CPLog
                         {
                             _config.Dump();
                             ReconfigExistingLoggers();
-#if !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
+#if CPLOG_IGNORE && !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
                             TryWachtingConfigFile();
 #endif
                         }
@@ -306,7 +310,7 @@ namespace CPLog
             }
         }
 
-#if !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
+#if CPLOG_IGNORE && !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
         private void TryWachtingConfigFile()
         {
             try
@@ -349,8 +353,8 @@ namespace CPLog
         }
 
 #endif
-
-        private void TryLoadFromFilePaths()
+#if CPLOG_IGNORE
+		private void TryLoadFromFilePaths()
         {
             var configFileNames = GetCandidateConfigFilePaths();
             foreach (string configFile in configFileNames)
@@ -363,8 +367,9 @@ namespace CPLog
             TryLoadFromAndroidAssets();
 #endif
         }
+#endif
 
-#if !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD
+#if CPLOG_IGNORE && !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD
 
         private void TryLoadFromAppConfig()
         {
@@ -389,7 +394,7 @@ namespace CPLog
         /// </summary>
         public LogLevel GlobalThreshold
         {
-            get => _globalThreshold;
+			get { return _globalThreshold; }
 
             set
             {
@@ -763,7 +768,7 @@ namespace CPLog
         }
 #endif
 
-#if !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
+#if CPLOG_IGNORE && !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
         internal void ReloadConfigOnTimer(object state)
         {
             if (_reloadTimer == null && _isDisposing)
@@ -955,7 +960,7 @@ namespace CPLog
 
             _isDisposing = true;
 
-#if !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
+#if CPLOG_IGNORE && !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
             LoggerShutdown -= OnStopLogging;
             ConfigurationReloaded = null;   // Release event listeners
 
@@ -967,11 +972,11 @@ namespace CPLog
             }
 #endif
 
-            if (Monitor.TryEnter(_syncRoot, 500))
+			if(Monitor.TryEnter(_syncRoot, 500))
             {
                 try
                 {
-#if !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
+#if CPLOG_IGNORE && !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
                     var currentTimer = _reloadTimer;
                     if (currentTimer != null)
                     {
@@ -1065,12 +1070,12 @@ namespace CPLog
             }
             InternalLogger.Info("Logger has been closed down.");
         }
-
-        /// <summary>
-        /// Get file paths (including filename) for the possible NLog config files. 
-        /// </summary>
-        /// <returns>The filepaths to the possible config file</returns>
-        public IEnumerable<string> GetCandidateConfigFilePaths()
+#if CPLOG_IGNORE
+		/// <summary>
+		/// Get file paths (including filename) for the possible NLog config files. 
+		/// </summary>
+		/// <returns>The filepaths to the possible config file</returns>
+		public IEnumerable<string> GetCandidateConfigFilePaths()
         {
             if (_candidateConfigFilePaths != null)
             {
@@ -1079,12 +1084,12 @@ namespace CPLog
 
             return GetDefaultCandidateConfigFilePaths();
         }
-
-        /// <summary>
-        /// Overwrite the paths (including filename) for the possible NLog config files.
-        /// </summary>
-        /// <param name="filePaths">The filepaths to the possible config file</param>
-        public void SetCandidateConfigFilePaths(IEnumerable<string> filePaths)
+#endif
+		/// <summary>
+		/// Overwrite the paths (including filename) for the possible NLog config files.
+		/// </summary>
+		/// <param name="filePaths">The filepaths to the possible config file</param>
+		public void SetCandidateConfigFilePaths(IEnumerable<string> filePaths)
         {
             _candidateConfigFilePaths = new List<string>();
 
@@ -1118,7 +1123,7 @@ namespace CPLog
             if (!platformFileSystemCaseInsensitive && !string.IsNullOrEmpty(baseDirectory))
                 yield return Path.Combine(baseDirectory, nLogConfigFileLowerCase);
 
-#if !SILVERLIGHT && !NETSTANDARD1_3
+#if CPLOG_IGNORE && !SILVERLIGHT && !NETSTANDARD1_3
             var entryAssemblyLocation = PathHelpers.TrimDirectorySeparators(AssemblyHelpers.GetAssemblyFileLocation(System.Reflection.Assembly.GetEntryAssembly()));
             if (!string.IsNullOrEmpty(entryAssemblyLocation))
             {
@@ -1224,7 +1229,7 @@ namespace CPLog
                                 //well, it's not a Logger, and we should return a Logger.
 
                                 var errorMessage =
-                                    $"GetLogger / GetCurrentClassLogger got '{fullName}' as loggerType which doesn't inherit from Logger";
+                                    "GetLogger / GetCurrentClassLogger got '"+fullName+"' as loggerType which doesn't inherit from Logger";
                                 InternalLogger.Error(errorMessage);
                                 if (ThrowExceptions)
                                 {
@@ -1278,12 +1283,13 @@ namespace CPLog
             return newLogger;
         }
 
-        /// <summary>
-        /// Loads logging configuration from file (Currently only XML configuration files supported)
-        /// </summary>
-        /// <param name="configFile">Configuration file to be read</param>
-        /// <returns>LogFactory instance for fluent interface</returns>
-        public LogFactory LoadConfiguration(string configFile)
+#if CPLOG_IGNORE
+		/// <summary>
+		/// Loads logging configuration from file (Currently only XML configuration files supported)
+		/// </summary>
+		/// <param name="configFile">Configuration file to be read</param>
+		/// <returns>LogFactory instance for fluent interface</returns>
+		public LogFactory LoadConfiguration(string configFile)
         {
             configFile = GetConfigFile(configFile);
             Configuration = LoadXmlLoggingConfiguration(configFile);
@@ -1319,7 +1325,7 @@ namespace CPLog
             }
             return xmlConfig;
         }
-
+#endif
         private bool TryLoadLoggingConfiguration(string configFile, out LoggingConfiguration config)
         {
             try
@@ -1362,7 +1368,7 @@ namespace CPLog
             return false;   // No valid file found
         }
 
-#if !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
+#if CPLOG_IGNORE && !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
         private void ConfigFileChanged(object sender, EventArgs args)
         {
             InternalLogger.Info("Configuration file change detected! Reloading in {0}ms...", ReconfigAfterFileChangedTimeout);

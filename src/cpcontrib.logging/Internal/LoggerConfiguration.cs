@@ -1,4 +1,4 @@
-﻿// 
+// 
 // Copyright (c) 2004-2018 Jaroslaw Kowalski <jaak@jkowalski.net>, Kim Christensen, Julian Verdurmen
 // 
 // All rights reserved.
@@ -31,51 +31,67 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 // 
 
-namespace CPLog.Filters
+using System;
+
+namespace CPLog.Internal
 {
-    using Config;
-
     /// <summary>
-    /// An abstract filter class. Provides a way to eliminate log messages
-    /// based on properties other than logger name and log level.
+    /// Logger configuration.
     /// </summary>
-    [NLogConfigurationItem]
-    public abstract class Filter
+    internal class LoggerConfiguration
     {
+        private readonly TargetWithFilterChain[] _targetsByLevel;
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="Filter" /> class.
+        /// Initializes a new instance of the <see cref="LoggerConfiguration" /> class.
         /// </summary>
-        protected Filter()
+        /// <param name="targetsByLevel">The targets by level.</param>
+        /// <param name="exceptionLoggingOldStyle">  Use the old exception log handling of NLog 3.0? 
+        /// </param>
+        public LoggerConfiguration(TargetWithFilterChain[] targetsByLevel, bool exceptionLoggingOldStyle = false)
         {
-            Action = FilterResult.Neutral;
+            _targetsByLevel = targetsByLevel;
+#pragma warning disable 618
+            ExceptionLoggingOldStyle = exceptionLoggingOldStyle;
+#pragma warning restore 618
         }
 
         /// <summary>
-        /// Gets or sets the action to be taken when filter matches.
+        /// Use the old exception log handling of NLog 3.0? 
         /// </summary>
-        /// <docgen category='Filtering Options' order='10' />
-        [RequiredParameter]
-        public FilterResult Action { get; set; }
+        /// <remarks>This method was marked as obsolete before NLog 4.3.11 and it  will be removed in NLog 5.</remarks>
+        [Obsolete("This property marked obsolete before v4.3.11 and it will be removed in NLog 5.")]
+        public bool ExceptionLoggingOldStyle { get; private set; }
 
         /// <summary>
-        /// Gets the result of evaluating filter against given log event.
+        /// Gets targets for the specified level.
         /// </summary>
-        /// <param name="logEvent">The log event.</param>
-        /// <returns>Filter result.</returns>
-        internal FilterResult GetFilterResult(LogEventInfo logEvent)
+        /// <param name="level">The level.</param>
+        /// <returns>Chain of targets with attached filters.</returns>
+        public TargetWithFilterChain GetTargetsForLevel(LogLevel level)
         {
-            return Check(logEvent);
+            if (level == LogLevel.Off)
+            {
+                return null;
+            }
+
+            return _targetsByLevel[level.Ordinal];
         }
 
         /// <summary>
-        /// Checks whether log event should be logged or not.
+        /// Determines whether the specified level is enabled.
         /// </summary>
-        /// <param name="logEvent">Log event.</param>
+        /// <param name="level">The level.</param>
         /// <returns>
-        /// <see cref="FilterResult.Ignore"/> - if the log event should be ignored<br/>
-        /// <see cref="FilterResult.Neutral"/> - if the filter doesn't want to decide<br/>
-        /// <see cref="FilterResult.Log"/> - if the log event should be logged<br/>
-        /// .</returns>
-        protected abstract FilterResult Check(LogEventInfo logEvent);
+        /// A value of <c>true</c> if the specified level is enabled; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsEnabled(LogLevel level)
+        {
+            if (level == LogLevel.Off)
+            {
+                return false;
+            }
+            return _targetsByLevel[level.Ordinal] != null;
+        }
     }
 }

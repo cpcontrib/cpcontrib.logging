@@ -1,4 +1,4 @@
-﻿// 
+// 
 // Copyright (c) 2004-2018 Jaroslaw Kowalski <jaak@jkowalski.net>, Kim Christensen, Julian Verdurmen
 // 
 // All rights reserved.
@@ -31,51 +31,50 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 // 
 
-namespace CPLog.Filters
+namespace CPLog.Config
 {
-    using Config;
+    using System;
 
     /// <summary>
-    /// An abstract filter class. Provides a way to eliminate log messages
-    /// based on properties other than logger name and log level.
+    /// Arguments for <see cref="LogFactory.ConfigurationChanged"/> events.
     /// </summary>
-    [NLogConfigurationItem]
-    public abstract class Filter
+    public class LoggingConfigurationChangedEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Filter" /> class.
+        /// Initializes a new instance of the <see cref="LoggingConfigurationChangedEventArgs" /> class.
         /// </summary>
-        protected Filter()
+        /// <param name="activatedConfiguration">The new configuration.</param>
+        /// <param name="deactivatedConfiguration">The old configuration.</param>
+        public LoggingConfigurationChangedEventArgs(LoggingConfiguration activatedConfiguration, LoggingConfiguration deactivatedConfiguration)
         {
-            Action = FilterResult.Neutral;
+            ActivatedConfiguration = activatedConfiguration;
+            DeactivatedConfiguration = deactivatedConfiguration;
         }
 
         /// <summary>
-        /// Gets or sets the action to be taken when filter matches.
+        /// Gets the old configuration.
         /// </summary>
-        /// <docgen category='Filtering Options' order='10' />
-        [RequiredParameter]
-        public FilterResult Action { get; set; }
+        /// <value>The old configuration.</value>
+        public LoggingConfiguration DeactivatedConfiguration { get; private set; }
 
         /// <summary>
-        /// Gets the result of evaluating filter against given log event.
+        /// Gets the new configuration.
         /// </summary>
-        /// <param name="logEvent">The log event.</param>
-        /// <returns>Filter result.</returns>
-        internal FilterResult GetFilterResult(LogEventInfo logEvent)
-        {
-            return Check(logEvent);
-        }
+        /// <value>The new configuration.</value>
+        public LoggingConfiguration ActivatedConfiguration { get; private set; }
 
         /// <summary>
-        /// Checks whether log event should be logged or not.
+        /// Gets the new configuration
         /// </summary>
-        /// <param name="logEvent">Log event.</param>
-        /// <returns>
-        /// <see cref="FilterResult.Ignore"/> - if the log event should be ignored<br/>
-        /// <see cref="FilterResult.Neutral"/> - if the filter doesn't want to decide<br/>
-        /// <see cref="FilterResult.Log"/> - if the log event should be logged<br/>
-        /// .</returns>
-        protected abstract FilterResult Check(LogEventInfo logEvent);
+        /// <value>The new configuration.</value>
+        [Obsolete("This option will be removed in NLog 5. Marked obsolete on NLog 4.5")]
+        public LoggingConfiguration OldConfiguration => ActivatedConfiguration;
+
+        /// <summary>
+        /// Gets the old configuration
+        /// </summary>
+        /// <value>The old configuration.</value>
+        [Obsolete("This option will be removed in NLog 5. Marked obsolete on NLog 4.5")]
+        public LoggingConfiguration NewConfiguration => DeactivatedConfiguration;
     }
 }

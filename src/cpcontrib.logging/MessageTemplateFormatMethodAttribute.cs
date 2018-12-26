@@ -31,51 +31,29 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 // 
 
-namespace CPLog.Filters
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace CPLog
 {
-    using Config;
-
     /// <summary>
-    /// An abstract filter class. Provides a way to eliminate log messages
-    /// based on properties other than logger name and log level.
+    /// Mark a parameter of a method for message templating
     /// </summary>
-    [NLogConfigurationItem]
-    public abstract class Filter
+    [AttributeUsage(AttributeTargets.Constructor | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    public sealed class MessageTemplateFormatMethodAttribute : Attribute
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Filter" /> class.
-        /// </summary>
-        protected Filter()
+        /// <param name="parameterName">
+        /// Specifies which parameter of an annotated method should be treated as message-template-string
+        /// </param>
+        public MessageTemplateFormatMethodAttribute(string parameterName)
         {
-            Action = FilterResult.Neutral;
+            ParameterName = parameterName;
         }
 
         /// <summary>
-        /// Gets or sets the action to be taken when filter matches.
+        /// The name of the parameter that should be as treated as message-template-string
         /// </summary>
-        /// <docgen category='Filtering Options' order='10' />
-        [RequiredParameter]
-        public FilterResult Action { get; set; }
-
-        /// <summary>
-        /// Gets the result of evaluating filter against given log event.
-        /// </summary>
-        /// <param name="logEvent">The log event.</param>
-        /// <returns>Filter result.</returns>
-        internal FilterResult GetFilterResult(LogEventInfo logEvent)
-        {
-            return Check(logEvent);
-        }
-
-        /// <summary>
-        /// Checks whether log event should be logged or not.
-        /// </summary>
-        /// <param name="logEvent">Log event.</param>
-        /// <returns>
-        /// <see cref="FilterResult.Ignore"/> - if the log event should be ignored<br/>
-        /// <see cref="FilterResult.Neutral"/> - if the filter doesn't want to decide<br/>
-        /// <see cref="FilterResult.Log"/> - if the log event should be logged<br/>
-        /// .</returns>
-        protected abstract FilterResult Check(LogEventInfo logEvent);
+        public string ParameterName { get; }
     }
 }

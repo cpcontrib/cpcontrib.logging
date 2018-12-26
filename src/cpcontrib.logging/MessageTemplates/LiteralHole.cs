@@ -31,51 +31,25 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 // 
 
-namespace CPLog.Filters
+namespace CPLog.MessageTemplates
 {
-    using Config;
-
     /// <summary>
-    /// An abstract filter class. Provides a way to eliminate log messages
-    /// based on properties other than logger name and log level.
+    /// Combines Literal and Hole
     /// </summary>
-    [NLogConfigurationItem]
-    public abstract class Filter
+    internal struct LiteralHole
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Filter" /> class.
-        /// </summary>
-        protected Filter()
+        /// <summary>Literal</summary>
+        public readonly Literal Literal;
+        /// <summary>Hole</summary>
+        /// <remarks>Uninitialized when <see cref="MessageTemplates.Literal.Skip"/> = 0.</remarks>
+        public readonly Hole Hole;
+
+        public LiteralHole(Literal literal, Hole hole)
         {
-            Action = FilterResult.Neutral;
+            Literal = literal;
+            Hole = hole;
         }
 
-        /// <summary>
-        /// Gets or sets the action to be taken when filter matches.
-        /// </summary>
-        /// <docgen category='Filtering Options' order='10' />
-        [RequiredParameter]
-        public FilterResult Action { get; set; }
-
-        /// <summary>
-        /// Gets the result of evaluating filter against given log event.
-        /// </summary>
-        /// <param name="logEvent">The log event.</param>
-        /// <returns>Filter result.</returns>
-        internal FilterResult GetFilterResult(LogEventInfo logEvent)
-        {
-            return Check(logEvent);
-        }
-
-        /// <summary>
-        /// Checks whether log event should be logged or not.
-        /// </summary>
-        /// <param name="logEvent">Log event.</param>
-        /// <returns>
-        /// <see cref="FilterResult.Ignore"/> - if the log event should be ignored<br/>
-        /// <see cref="FilterResult.Neutral"/> - if the filter doesn't want to decide<br/>
-        /// <see cref="FilterResult.Log"/> - if the log event should be logged<br/>
-        /// .</returns>
-        protected abstract FilterResult Check(LogEventInfo logEvent);
+        public bool MaybePositionalTemplate { get { return Literal.Skip != 0 && Hole.Index != -1 && Hole.CaptureType == CaptureType.Normal; } }
     }
 }

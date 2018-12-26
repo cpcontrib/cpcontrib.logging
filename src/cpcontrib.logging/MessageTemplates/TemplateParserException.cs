@@ -1,4 +1,4 @@
-﻿// 
+// 
 // Copyright (c) 2004-2018 Jaroslaw Kowalski <jaak@jkowalski.net>, Kim Christensen, Julian Verdurmen
 // 
 // All rights reserved.
@@ -31,51 +31,35 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 // 
 
-namespace CPLog.Filters
-{
-    using Config;
+using System;
 
+namespace CPLog.MessageTemplates
+{
     /// <summary>
-    /// An abstract filter class. Provides a way to eliminate log messages
-    /// based on properties other than logger name and log level.
+    /// Error when parsing a template.
     /// </summary>
-    [NLogConfigurationItem]
-    public abstract class Filter
+    public class TemplateParserException : Exception
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Filter" /> class.
+        /// Current index when the error occurred.
         /// </summary>
-        protected Filter()
+        public int Index { get; }
+
+        /// <summary>
+        /// The template we were parsing
+        /// </summary>
+        public string Template { get; }
+
+        /// <summary>
+        /// New exception
+        /// </summary>
+        /// <param name="message">The message to be shown.</param>
+        /// <param name="index">Current index when the error occurred.</param>
+        /// <param name="template"></param>
+        public TemplateParserException(string message, int index, string template) : base(message)
         {
-            Action = FilterResult.Neutral;
+            Index = index;
+            Template = template;
         }
-
-        /// <summary>
-        /// Gets or sets the action to be taken when filter matches.
-        /// </summary>
-        /// <docgen category='Filtering Options' order='10' />
-        [RequiredParameter]
-        public FilterResult Action { get; set; }
-
-        /// <summary>
-        /// Gets the result of evaluating filter against given log event.
-        /// </summary>
-        /// <param name="logEvent">The log event.</param>
-        /// <returns>Filter result.</returns>
-        internal FilterResult GetFilterResult(LogEventInfo logEvent)
-        {
-            return Check(logEvent);
-        }
-
-        /// <summary>
-        /// Checks whether log event should be logged or not.
-        /// </summary>
-        /// <param name="logEvent">Log event.</param>
-        /// <returns>
-        /// <see cref="FilterResult.Ignore"/> - if the log event should be ignored<br/>
-        /// <see cref="FilterResult.Neutral"/> - if the filter doesn't want to decide<br/>
-        /// <see cref="FilterResult.Log"/> - if the log event should be logged<br/>
-        /// .</returns>
-        protected abstract FilterResult Check(LogEventInfo logEvent);
     }
 }

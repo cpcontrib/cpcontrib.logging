@@ -1,4 +1,4 @@
-﻿// 
+// 
 // Copyright (c) 2004-2018 Jaroslaw Kowalski <jaak@jkowalski.net>, Kim Christensen, Julian Verdurmen
 // 
 // All rights reserved.
@@ -31,51 +31,49 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 // 
 
-namespace CPLog.Filters
+#if !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
+
+namespace CPLog.Config
 {
-    using Config;
+    using System;
 
     /// <summary>
-    /// An abstract filter class. Provides a way to eliminate log messages
-    /// based on properties other than logger name and log level.
+    /// Arguments for <see cref="LogFactory.ConfigurationReloaded"/>.
     /// </summary>
-    [NLogConfigurationItem]
-    public abstract class Filter
+    public class LoggingConfigurationReloadedEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Filter" /> class.
+        /// Initializes a new instance of the <see cref="LoggingConfigurationReloadedEventArgs" /> class.
         /// </summary>
-        protected Filter()
+        /// <param name="succeeded">Whether configuration reload has succeeded.</param>
+        public LoggingConfigurationReloadedEventArgs(bool succeeded)
         {
-            Action = FilterResult.Neutral;
+            Succeeded = succeeded;
         }
 
         /// <summary>
-        /// Gets or sets the action to be taken when filter matches.
+        /// Initializes a new instance of the <see cref="LoggingConfigurationReloadedEventArgs" /> class.
         /// </summary>
-        /// <docgen category='Filtering Options' order='10' />
-        [RequiredParameter]
-        public FilterResult Action { get; set; }
-
-        /// <summary>
-        /// Gets the result of evaluating filter against given log event.
-        /// </summary>
-        /// <param name="logEvent">The log event.</param>
-        /// <returns>Filter result.</returns>
-        internal FilterResult GetFilterResult(LogEventInfo logEvent)
+        /// <param name="succeeded">Whether configuration reload has succeeded.</param>
+        /// <param name="exception">The exception during configuration reload.</param>
+        public LoggingConfigurationReloadedEventArgs(bool succeeded, Exception exception)
         {
-            return Check(logEvent);
+            Succeeded = succeeded;
+            Exception = exception;
         }
 
         /// <summary>
-        /// Checks whether log event should be logged or not.
+        /// Gets a value indicating whether configuration reload has succeeded.
         /// </summary>
-        /// <param name="logEvent">Log event.</param>
-        /// <returns>
-        /// <see cref="FilterResult.Ignore"/> - if the log event should be ignored<br/>
-        /// <see cref="FilterResult.Neutral"/> - if the filter doesn't want to decide<br/>
-        /// <see cref="FilterResult.Log"/> - if the log event should be logged<br/>
-        /// .</returns>
-        protected abstract FilterResult Check(LogEventInfo logEvent);
+        /// <value>A value of <c>true</c> if succeeded; otherwise, <c>false</c>.</value>
+        public bool Succeeded { get; private set; }
+
+        /// <summary>
+        /// Gets the exception which occurred during configuration reload.
+        /// </summary>
+        /// <value>The exception.</value>
+        public Exception Exception { get; private set; }
     }
 }
+
+#endif

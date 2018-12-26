@@ -30,7 +30,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
 // THE POSSIBILITY OF SUCH DAMAGE.
 // 
-
+#pragma warning disable 3021 
 namespace CPLog
 {
     using System;
@@ -76,8 +76,8 @@ namespace CPLog
         /// </summary>
         public static event EventHandler<LoggingConfigurationChangedEventArgs> ConfigurationChanged
         {
-            add => factory.ConfigurationChanged += value;
-            remove => factory.ConfigurationChanged -= value;
+			add { factory.ConfigurationChanged += value; }
+            remove { factory.ConfigurationChanged -= value; }
         }
 
 #if !SILVERLIGHT && !__IOS__ && !__ANDROID__ && !NETSTANDARD1_3
@@ -86,8 +86,8 @@ namespace CPLog
         /// </summary>
         public static event EventHandler<LoggingConfigurationReloadedEventArgs> ConfigurationReloaded
         {
-            add => factory.ConfigurationReloaded += value;
-            remove => factory.ConfigurationReloaded -= value;
+			add { factory.ConfigurationReloaded += value; }
+			remove { factory.ConfigurationReloaded -= value; }
         }
 #endif
         /// <summary>
@@ -96,8 +96,8 @@ namespace CPLog
         /// </summary>
         public static bool ThrowExceptions
         {
-            get => factory.ThrowExceptions;
-            set => factory.ThrowExceptions = value;
+            get { return factory.ThrowExceptions; }
+			set { factory.ThrowExceptions = value; }
         }
 
         /// <summary>
@@ -111,8 +111,8 @@ namespace CPLog
         /// </remarks>
         public static bool? ThrowConfigExceptions
         {
-            get => factory.ThrowConfigExceptions;
-            set => factory.ThrowConfigExceptions = value;
+			get { return factory.ThrowConfigExceptions; }
+            set { factory.ThrowConfigExceptions = value; }
         }
 
         /// <summary>
@@ -121,8 +121,8 @@ namespace CPLog
         /// </summary>
         public static bool KeepVariablesOnReload
         {
-            get => factory.KeepVariablesOnReload;
-            set => factory.KeepVariablesOnReload = value;
+			get { return factory.KeepVariablesOnReload; }
+			set { factory.KeepVariablesOnReload = value; }
         }
 
         /// <summary>
@@ -131,25 +131,26 @@ namespace CPLog
         /// </summary>
         public static LoggingConfiguration Configuration
         {
-            get => factory.Configuration;
-            set => factory.Configuration = value;
+			get { return factory.Configuration; }
+			set { factory.Configuration = value; }
         }
 
-        /// <summary>
-        /// Loads logging configuration from file (Currently only XML configuration files supported)
-        /// </summary>
-        /// <param name="configFile">Configuration file to be read</param>
-        /// <returns>LogFactory instance for fluent interface</returns>
-        public static LogFactory LoadConfiguration(string configFile)
+#if CPLOG_IGNORE
+		/// <summary>
+		/// Loads logging configuration from file (Currently only XML configuration files supported)
+		/// </summary>
+		/// <param name="configFile">Configuration file to be read</param>
+		/// <returns>LogFactory instance for fluent interface</returns>
+		public static LogFactory LoadConfiguration(string configFile)
         {
             factory.LoadConfiguration(configFile);
             return factory;
         }
-
-        /// <summary>
-        /// Gets or sets the global log threshold. Log events below this threshold are not logged.
-        /// </summary>
-        public static LogLevel GlobalThreshold
+#endif
+		/// <summary>
+		/// Gets or sets the global log threshold. Log events below this threshold are not logged.
+		/// </summary>
+		public static LogLevel GlobalThreshold
         {
             get => factory.GlobalThreshold;
             set => factory.GlobalThreshold = value;

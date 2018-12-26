@@ -1,18 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// 
+// Copyright (c) 2004-2018 Jaroslaw Kowalski <jaak@jkowalski.net>, Kim Christensen, Julian Verdurmen
+// 
+// All rights reserved.
+// 
+// Redistribution and use in source and binary forms, with or without 
+// modification, are permitted provided that the following conditions 
+// are met:
+// 
+// * Redistributions of source code must retain the above copyright notice, 
+//   this list of conditions and the following disclaimer. 
+// 
+// * Redistributions in binary form must reproduce the above copyright notice,
+//   this list of conditions and the following disclaimer in the documentation
+//   and/or other materials provided with the distribution. 
+// 
+// * Neither the name of Jaroslaw Kowalski nor the names of its 
+//   contributors may be used to endorse or promote products derived from this
+//   software without specific prior written permission. 
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
+// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+// CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+// SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
+// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
+// CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+// THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 namespace CPLog
 {
-	using CPLog.Config;
-	using System.ComponentModel;
+    using System;
+    using System.ComponentModel;
+    using CPLog.Internal;
 
+#if NET4_5
+    using System.Threading.Tasks;
+#endif
 
 	/// <summary>
 	/// Provides logging interface and utility functions.
 	/// </summary>
+    [CLSCompliant(true)]
 	public partial class Logger : ILogger
     {
         private readonly Type _loggerType = typeof(Logger);
@@ -28,25 +60,30 @@ namespace CPLog
         /// <summary>
         /// Initializes a new instance of the <see cref="Logger"/> class.
         /// </summary>
-		internal Logger(string name)
+        protected internal Logger()
 		{
 			if(Common.InternalLogger.IsDebugEnabled)
 			{
 				System.Diagnostics.StackTrace stacktrace = new System.Diagnostics.StackTrace(0);
-				Common.InternalLogger.Debug("Creating logger '{0}':\n{1}", name, stacktrace.ToString());
+				Common.InternalLogger.Debug("Creating logger '{0}':\n{1}", Name, stacktrace.ToString());
 			}
 
 			//remove noise
-			name = name.Replace("CrownPeak.CMSAPI.CustomLibrary.", "[CustomLibrary].");
-			name = name.Replace("CrownPeak.CMSAPI.", "[CMSAPI].");
+			Name = Name
+				.Replace("CrownPeak.CMSAPI.CustomLibrary.", "[CustomLibrary].")
+				.Replace("CrownPeak.CMSAPI.", "[CMSAPI].");
 
-			this.Name = name;
 		}
+
+        /// <summary>
+        /// Occurs when logger configuration changes.
+        /// </summary>
+        public event EventHandler<EventArgs> LoggerReconfigured;
 
         /// <summary>
         /// Gets the name of the logger.
         /// </summary>
-		public string Name { get; set; }
+        public string Name { get; private set; }
 
         /// <summary>
         /// Gets the factory that created this logger.
@@ -68,7 +105,6 @@ namespace CPLog
             return GetTargetsForLevel(level) != null;
         }
 
-		/*
         /// <summary>
         /// Writes the specified diagnostic message.
         /// </summary>
@@ -82,8 +118,7 @@ namespace CPLog
                 WriteToTargets(logEvent);
             }
         }
-		*/
-		/*
+
         /// <summary>
         /// Writes the specified diagnostic message.
         /// </summary>
@@ -98,7 +133,6 @@ namespace CPLog
                 WriteToTargets(wrapperType, logEvent);
             }
         }
-		*/
 
         #region Log() overloads
 

@@ -68,6 +68,7 @@ namespace CPLog.Config
         /// Gets the factory that will be configured
         /// </summary>
         public LogFactory LogFactory { get; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LoggingConfiguration" /> class.
         /// </summary>
@@ -85,6 +86,12 @@ namespace CPLog.Config
             LoggingRules = new List<LoggingRule>();
         }
 
+        /// <summary>
+        /// Use the old exception log handling of NLog 3.0? 
+        /// </summary>
+        /// <remarks>This method was marked as obsolete on NLog 4.1 and it may be removed in a future release.</remarks>
+        [Obsolete("This option will be removed in NLog 5. Marked obsolete on NLog 4.1")]
+        public bool ExceptionLoggingOldStyle { get; set; }
 
         /// <summary>
         /// Gets the variables defined in the configuration.
@@ -532,14 +539,15 @@ namespace CPLog.Config
             }
         }
 
-        /// <summary>
-        /// Installs target-specific objects on current system.
-        /// </summary>
-        /// <param name="installationContext">The installation context.</param>
-        /// <remarks>
-        /// Installation typically runs with administrative permissions.
-        /// </remarks>
-        public void Install(InstallationContext installationContext)
+#if CPLOG_IGNORE
+		/// <summary>
+		/// Installs target-specific objects on current system.
+		/// </summary>
+		/// <param name="installationContext">The installation context.</param>
+		/// <remarks>
+		/// Installation typically runs with administrative permissions.
+		/// </remarks>
+		public void Install(InstallationContext installationContext)
         {
             if (installationContext == null)
             {
@@ -608,6 +616,7 @@ namespace CPLog.Config
                 }
             }
         }
+#endif
 
         /// <summary>
         /// Closes all targets and releases any unmanaged resources.

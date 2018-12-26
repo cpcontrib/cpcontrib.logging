@@ -1,4 +1,4 @@
-﻿// 
+// 
 // Copyright (c) 2004-2018 Jaroslaw Kowalski <jaak@jkowalski.net>, Kim Christensen, Julian Verdurmen
 // 
 // All rights reserved.
@@ -31,51 +31,41 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 // 
 
-namespace CPLog.Filters
+namespace CPLog.MessageTemplates
 {
-    using Config;
-
     /// <summary>
-    /// An abstract filter class. Provides a way to eliminate log messages
-    /// based on properties other than logger name and log level.
+    /// A hole that will be replaced with a value
     /// </summary>
-    [NLogConfigurationItem]
-    public abstract class Filter
+    internal struct Hole
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Filter" /> class.
+        /// Constructor
         /// </summary>
-        protected Filter()
+        public Hole(string name, string format, CaptureType captureType, short position, short alignment)
         {
-            Action = FilterResult.Neutral;
+            Name = name;
+            Format = format;
+            CaptureType = captureType;
+            Index = position;
+            Alignment = alignment;
         }
 
+        /// <summary>Parameter name sent to structured loggers.</summary>
+        /// <remarks>This is everything between "{" and the first of ",:}". 
+        /// Including surrounding spaces and names that are numbers.</remarks>
+        public readonly string Name;
+        /// <summary>Format to render the parameter.</summary>
+        /// <remarks>This is everything between ":" and the first unescaped "}"</remarks>
+        public readonly string Format;
         /// <summary>
-        /// Gets or sets the action to be taken when filter matches.
+        /// Type
         /// </summary>
-        /// <docgen category='Filtering Options' order='10' />
-        [RequiredParameter]
-        public FilterResult Action { get; set; }
-
-        /// <summary>
-        /// Gets the result of evaluating filter against given log event.
-        /// </summary>
-        /// <param name="logEvent">The log event.</param>
-        /// <returns>Filter result.</returns>
-        internal FilterResult GetFilterResult(LogEventInfo logEvent)
-        {
-            return Check(logEvent);
-        }
-
-        /// <summary>
-        /// Checks whether log event should be logged or not.
-        /// </summary>
-        /// <param name="logEvent">Log event.</param>
-        /// <returns>
-        /// <see cref="FilterResult.Ignore"/> - if the log event should be ignored<br/>
-        /// <see cref="FilterResult.Neutral"/> - if the filter doesn't want to decide<br/>
-        /// <see cref="FilterResult.Log"/> - if the log event should be logged<br/>
-        /// .</returns>
-        protected abstract FilterResult Check(LogEventInfo logEvent);
+        public readonly CaptureType CaptureType;
+        /// <summary>When the template is positional, this is the parsed name of this parameter.</summary>
+        /// <remarks>For named templates, the value of Index is undefined.</remarks>
+        public readonly short Index;
+        /// <summary>Alignment to render the parameter, by default 0.</summary>
+        /// <remarks>This is the parsed value between "," and the first of ":}"</remarks>
+        public readonly short Alignment;
     }
 }

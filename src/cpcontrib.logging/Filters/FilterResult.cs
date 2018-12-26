@@ -1,4 +1,4 @@
-﻿// 
+// 
 // Copyright (c) 2004-2018 Jaroslaw Kowalski <jaak@jkowalski.net>, Kim Christensen, Julian Verdurmen
 // 
 // All rights reserved.
@@ -33,49 +33,34 @@
 
 namespace CPLog.Filters
 {
-    using Config;
-
     /// <summary>
-    /// An abstract filter class. Provides a way to eliminate log messages
-    /// based on properties other than logger name and log level.
+    /// Filter result.
     /// </summary>
-    [NLogConfigurationItem]
-    public abstract class Filter
+    public enum FilterResult
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Filter" /> class.
+        /// The filter doesn't want to decide whether to log or discard the message.
         /// </summary>
-        protected Filter()
-        {
-            Action = FilterResult.Neutral;
-        }
+        Neutral, 
 
         /// <summary>
-        /// Gets or sets the action to be taken when filter matches.
+        /// The message should be logged.
         /// </summary>
-        /// <docgen category='Filtering Options' order='10' />
-        [RequiredParameter]
-        public FilterResult Action { get; set; }
+        Log, 
 
         /// <summary>
-        /// Gets the result of evaluating filter against given log event.
+        /// The message should not be logged.
         /// </summary>
-        /// <param name="logEvent">The log event.</param>
-        /// <returns>Filter result.</returns>
-        internal FilterResult GetFilterResult(LogEventInfo logEvent)
-        {
-            return Check(logEvent);
-        }
+        Ignore, 
 
         /// <summary>
-        /// Checks whether log event should be logged or not.
+        /// The message should be logged and processing should be finished.
         /// </summary>
-        /// <param name="logEvent">Log event.</param>
-        /// <returns>
-        /// <see cref="FilterResult.Ignore"/> - if the log event should be ignored<br/>
-        /// <see cref="FilterResult.Neutral"/> - if the filter doesn't want to decide<br/>
-        /// <see cref="FilterResult.Log"/> - if the log event should be logged<br/>
-        /// .</returns>
-        protected abstract FilterResult Check(LogEventInfo logEvent);
+        LogFinal, 
+
+        /// <summary>
+        /// The message should not be logged and processing should be finished.
+        /// </summary>
+        IgnoreFinal, 
     }
 }
