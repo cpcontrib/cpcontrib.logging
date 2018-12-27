@@ -8,9 +8,9 @@ cppm install cpcontrib.logging
 
 cpcontrib.logging is designed to be similar to NLog logging framework (see NLog).
 
-We've also included two default loggers for sending Email and using CrownPeak's Util.Log sink.
+We've also included two non-NLog-compliant loggers for sending Email and using CrownPeak's Util.Log sink, so CMS developers can start utilizing some better logging for the time being.  Both loggers support Is[Level]Enabled calls, and calls to specific levels like `Debug(message)` or `Info(message)`.  They also support the messageGeneratorFunc overloads similar to NLog level logging functions.
 
-## EmailLogger
+### EmailLogger
 
 EmailLogger sends a email with all the log messages after calling Flush or Dispose.  Best to use a using statement to ensure Dispose is called.
 
@@ -30,7 +30,7 @@ EmailLogger sends a email with all the log messages after calling Flush or Dispo
 %>
 ```
 
-## UtilLogLogger
+### UtilLogLogger
 
 The UtilLogLogger utilizes the Util.Log method for recording log entries to history.  Two options, to log into a specific Asset's history or the System's history.  
 
