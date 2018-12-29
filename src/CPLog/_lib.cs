@@ -1,4 +1,5 @@
-﻿// PORTIONS Copyright (c) 2017 NewtonWorks LLC
+﻿//!packer:targetFile=CPLog.cs
+// PORTIONS Copyright (c) 2017 NewtonWorks LLC
 //  this code adapts NLog into CrownPeak CMS.
 //
 // 
