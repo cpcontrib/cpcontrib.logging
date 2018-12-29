@@ -39,9 +39,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ILog.cs" />
+    <Compile Include="ILogProvider.cs" />
+    <Compile Include="LogExtensions.cs" />
+    <Compile Include="LoggerDelegate.cs" />
+    <Compile Include="LoggerExecutionWrapper.cs" />
+    <Compile Include="LogLevel.cs" />
+    <Compile Include="LogProvider.cs" />
+    <Compile Include="LogProviders\DisposableAction.cs" />
+    <Compile Include="LogProviders\LibLogException.cs" />
+    <Compile Include="LogProviders\LogMessageFormatter.cs" />
+    <Compile Include="LogProviders\LogProviderBase.cs" />
+    <Compile Include="LogProviders\NLogProvider.cs" />
+    <Compile Include="TypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="paket.references" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -59,4 +73,15 @@
       <Paket>True</Paket>
     </Reference>
   </ItemGroup>
+  <Choose>
+    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And $(TargetFrameworkVersion) == 'v2.1') Or ($(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v2.0')">
+      <ItemGroup>
+        <Reference Include="Microsoft.CSharp">
+          <HintPath>..\..\packages\Microsoft.CSharp\ref\netstandard2.0\Microsoft.CSharp.dll</HintPath>
+          <Private>False</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
 </Project>

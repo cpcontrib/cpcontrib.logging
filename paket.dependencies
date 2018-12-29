@@ -7,3 +7,4 @@ nuget NUnit3TestAdapter 3.9.0 restriction: >= net45
 
 source http://nuget.cp-contrib.com/nuget
 nuget CrownPeak.CMSAPIProxy
+nuget LibLog
